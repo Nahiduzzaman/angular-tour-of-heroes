@@ -7,10 +7,11 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { Hero } from './hero';
 import { MessageService } from './message.service';
+import { ObservableService } from './observable.service';
 
 const httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
+}; 
 
 @Injectable()
 export class HeroService {
@@ -18,11 +19,13 @@ export class HeroService {
 
     constructor(
         private http: HttpClient,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private observableService : ObservableService
     ) { }
 
     /** GET heroes from the server */
     getHeroes(): Observable<Hero[]> {
+        this.observableService.callObserver();
         return this.http.get<Hero[]>(this.heroesUrl)
             .pipe(
                 tap(heroes => this.log(`fetched heroes`)),
